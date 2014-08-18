@@ -1,0 +1,7 @@
+<h2>Book of Mormon</h2>
+<div ng-repeat="scripture in mastery.bom.scriptures">
+	<h3>{{scripture.book}} {{scripture.chapter}}:{{scripture.verse}} Difficulty: {{scripture.difficulty}}</h3>
+	<h4><em>{{scripture.gist}}</em></h4>
+	<p>Stars: {{user.mastery.bom[scripture.index].stars}}</p>
+	<a href="#/bom/{{scripture.index}}">Master this scripture!</a>
+</div>

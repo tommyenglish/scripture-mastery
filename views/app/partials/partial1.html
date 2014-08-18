@@ -1,0 +1,19 @@
+<audio id="addLetterSound" src="sound/typewriter-key.mp3" preload="auto"></audio>
+<p>Disable sound <input type="checkbox" ng-click="toggleSound()"/></p>
+<p>Scripture: {{scripture.book}} {{scripture.chapter}}:{{scripture.verse}}</p>
+<p>{{scripture.text}}</p>
+<p>Level: {{game.levelType}}</p>
+<p>Hearts: {{game.hearts}}</p>
+<p><button ng-click="game.powerups.heartRecovery.setItOff()">Add a heart</button></p>
+<p><button ng-click="game.powerups.freebie.setItOff()">Freebie</button></p>
+<p><button ng-click="game.powerups.flash.setItOff()">Flash</button></p>
+<div class="gameboard">
+	<span class="scripture-piece" ng-repeat="piece in scripture.generatedPieces" 
+		ng-class="{jumbled: piece.isJumbledPiece, selected: piece.isSelected, correct: piece.isAnsweredCorrectly, incorrect: piece.isAnsweredIncorrectly}" 
+		ng-click="selectPiece(piece.index)" ng-bind-html="piece.display"
+		></span>
+	<p>
+	<input maxlength="3" ng-disabled="lockdownAnswerBox" ng-change="checkAnswer()" id="answerBox" type="text" ng-model="userAnswer">
+	</p>
+	<p>User Answer: {{userAnswer}}</p>
+</div>
