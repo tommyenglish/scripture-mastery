@@ -3,40 +3,46 @@
 /* Controllers */
 
 angular.module('scriptureMasteryApp.controllers', [])
-  .controller('MyCtrl1', ['$scope', '$interval', '$timeout', '$routeParams', 'userFactory', 'masteryFactory', function($scope, $interval, $timeout, $routeParams, userFactory, masteryFactory) {
-  	var currentlySelectedPiece, displayWordTimer, scriptureIndex = $routeParams.scripture_index, user = userFactory.getUser(), mastery = masteryFactory.getMasteryScriptures();
+  .controller('MyCtrl1', ['$scope', '$interval', '$timeout', '$routeParams', '$location', 'userFactory', 'masteryFactory', function($scope, $interval, $timeout, $routeParams, $location, userFactory, masteryFactory) {
+  	var currentlySelectedPiece, displayWordTimer, scriptureSet = $routeParams.scripture_set, scriptureIndex = $routeParams.scripture_index, user = userFactory.getUser(), mastery = masteryFactory.getMasteryScriptures();
 
   	$scope.userAnswer = '';
   	$scope.lockdownAnswerBox = true;
   	
-  	$scope.scripture = mastery.bom.scriptures[scriptureIndex];
+    if(scriptureSet === 'bom') {
+      $scope.scripture = mastery.bom.scriptures[scriptureIndex];
+    }
+    else if(scriptureSet === 'ot') {
+      $scope.scripture = mastery.ot.scriptures[scriptureIndex];
+    }
+    else if(scriptureSet === 'nt') {
+      $scope.scripture = mastery.nt.scriptures[scriptureIndex];
+    }
+    else if(scriptureSet === 'dc') {
+      $scope.scripture = mastery.dc.scriptures[scriptureIndex];
+    }
 
-  	/*$scope.scripture = {
-  		book: 'Moroni',
-  		chapter: 7,
-  		verse: 45,
-  		text: 'And charity\'s suf1fereth "long", and is kind and envieth not, is not puffed up, seeketh not her own, is not easily provoked, and rejoiceth not in iniquity, but rejoiceth in the truth; beareth all things, believeth all things, hopeth all things, endureth all things.',
-  		generatedPieces: null // holds all the pieces that make up the scripture with jumbled and non-jumbled pieces.
-  	};*/
+  	if(!$scope.scripture) {
+      $location.path('/master-scriptures');
+    }
+
   	$scope.game = function() {
   		var game = {
   			levelType: 1,
   			hearts: 3,
   			powerups: {
   				heartRecovery: {
-  					tries: 1,
   					setItOff: function() {
-  						if(this.tries > 0 && game.hearts < 3) {
-  							this.tries -= 1;
+  						if(user.powerups.heartRecovery.tries > 0 && game.hearts < 3) {
+  							user.powerups.heartRecovery.tries -= 1;
   							game.hearts += 1;
   						}
   					}
   				},
 				freebie: {
-  					tries: 1,
   					setItOff: function() {
-  						if(this.tries > 0 && currentlySelectedPiece) {
-  							this.tries -= 1;
+  						if(user.powerups.freebie.tries > 0 && currentlySelectedPiece) {
+  							user.powerups.freebie.tries -= 1;
 							$scope.lockdownAnswerBox = true;
   							$scope.userAnswer = '';
   							currentlySelectedPiece.isAnsweredCorrectly = true;
@@ -45,12 +51,11 @@ angular.module('scriptureMasteryApp.controllers', [])
   					}
   				},
   				flash: {
-  					tries: 30,
   					setItOff: function() {
-  						if(this.tries > 0 && currentlySelectedPiece) {
+  						if(user.powerups.flash.tries > 0 && currentlySelectedPiece) {
   							var displayValue, duration = 200 - (50 * (game.levelType - 1));
 
-  							this.tries -= 1;
+  							user.powerups.flash.tries -= 1;
   							document.getElementById('answerBox').focus();
   							displayValue = currentlySelectedPiece.display;
   							currentlySelectedPiece.display = currentlySelectedPiece.answerKey;
@@ -69,7 +74,7 @@ angular.module('scriptureMasteryApp.controllers', [])
   	$scope.checkAnswer = checkAnswer;
   	$scope.showNextLetter = showNextLetter;
   	$scope.toggleSound = SM_AUDIO_MODULE.toggleSound;
-
+    $scope.powerups = user.powerups;
 
 
   	// let's get it started
@@ -101,7 +106,7 @@ angular.module('scriptureMasteryApp.controllers', [])
   		SM_AUDIO_MODULE.play('addLetterSound');	
   		if($scope.userAnswer.length === 3) {
   			$scope.lockdownAnswerBox = true;
-  			if($scope.userAnswer === currentlySelectedPiece.answerKey.substring(0, 3)) { // they got it right!
+  			if($scope.userAnswer.toLowerCase() === currentlySelectedPiece.answerKey.substring(0, 3).toLowerCase()) { // they got it right!
   				currentlySelectedPiece.isAnsweredCorrectly = true;
   				spellItOut();
   			}
@@ -150,9 +155,11 @@ angular.module('scriptureMasteryApp.controllers', [])
 			alert('out of hearts, game over!');
 		}
 		else if(SM_JUMBLE_MODULE.isPuzzleComplete()) {
+      userFactory.updateStars(scriptureSet, scriptureIndex, $scope.game.levelType);
+      
 			if($scope.game.levelType < 3) {
 				$scope.game.levelType += 1;
-				loadLevel(50, 5, $scope.game.levelType)
+				loadLevel(50, 5, $scope.game.levelType);
 			}
 			else if($scope.game.levelType === 3) {
 				$scope.game.levelType += 1;

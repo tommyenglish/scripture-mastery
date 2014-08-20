@@ -15,9 +15,9 @@ angular.module('scriptureMasteryApp.services', [])
         	currentScripture: null,
         	mastery: {
         		'bom': [
-        			{'index': 0, 'stars': 1},
-        			{'index': 1, 'stars': 2},
-        			{'index': 2, 'stars': 3},
+        			{'index': 0, 'stars': 0},
+        			{'index': 1, 'stars': 0},
+        			{'index': 2, 'stars': 0},
         			{'index': 3, 'stars': 0},
         			{'index': 4, 'stars': 0},
         			{'index': 5, 'stars': 0},
@@ -41,7 +41,18 @@ angular.module('scriptureMasteryApp.services', [])
         			{'index': 23, 'stars': 0},
         			{'index': 24, 'stars': 0}
         		]
-        	}
+        	},
+            powerups: {
+                heartRecovery: {
+                    tries: 1
+                },
+                freebie: {
+                    tries: 2
+                },
+                flash: {
+                    tries: 5
+                }
+            }
         };
 
         return {
@@ -50,6 +61,30 @@ angular.module('scriptureMasteryApp.services', [])
             //},
             getUser: function() {
                 return user;
+            },
+            updateStars: function(scriptureSet, scriptureIndex, stars) {
+                var currentStars, scriptureToUpdate;
+
+                if(scriptureSet === 'bom') {
+                  scriptureToUpdate = user.mastery.bom[scriptureIndex];
+                }
+                else if(scriptureSet === 'ot') {
+                  scriptureToUpdate = user.mastery.ot[scriptureIndex];
+                }
+                else if(scriptureSet === 'nt') {
+                  scriptureToUpdate = user.mastery.nt[scriptureIndex];
+                }
+                else if(scriptureSet === 'dc') {
+                  scriptureToUpdate = user.mastery.dc[scriptureIndex];
+                }
+
+                if(scriptureToUpdate) {
+                    currentStars = scriptureToUpdate.stars;
+
+                    if(stars > currentStars) {
+                        scriptureToUpdate.stars = stars;
+                    }
+                }
             }
         };
     })
@@ -84,7 +119,23 @@ angular.module('scriptureMasteryApp.services', [])
     				{'index': 23, 'difficulty': 5, 'book': 'Moroni', 'chapter': 7, 'verse': '45, 47–48', 'gist': 'Charity suffereth long.', 'text': 'And charity suffereth long, and is kind, and envieth not, and is not puffed up, seeketh not her own, is not easily provoked, thinketh no evil, and rejoiceth not in iniquity but rejoiceth in the truth, beareth all things, believeth all things, hopeth all things, endureth all things.<br/><br/>But charity is the pure love of Christ, and it endureth forever; and whoso is found possessed of it at the last day, it shall be well with him.<br/><br/>Wherefore, my beloved brethren, pray unto the Father with all the energy of heart, that ye may be filled with this love, which he hath bestowed upon all who are true followers of his Son, Jesus Christ; that ye may become the sons of God; that when he shall appear we shall be like him, for we shall see him as he is; that we may have this hope; that we may be purified even as he is pure. Amen.' },
     				{'index': 24, 'difficulty': 4, 'book': 'Moroni', 'chapter': 10, 'verse': '4–5', 'gist': 'The Holy Ghost reveals truth.', 'text': 'And when ye shall receive these things, I would exhort you that ye would ask God, the Eternal Father, in the name of Christ, if these things are not true; and if ye shall ask with a sincere heart, with real intent, having faith in Christ, he will manifest the truth of it unto you, by the power of the Holy Ghost.<br/><br/>And by the power of the Holy Ghost ye may know the truth of all things.' }
     			]
-    		}
+    		},
+            'ot': {
+                'scriptures': [
+                ]
+            },
+            'nt': {
+                'scriptures': [
+                ]
+            },
+            'dc': {
+                'scriptures': [
+                ]
+            },
+            'custom': {
+                'scriptures': [
+                ]
+            }
     		
     	}
 
