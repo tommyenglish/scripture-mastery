@@ -201,12 +201,20 @@ angular.module('scriptureMasteryApp.controllers', [])
 
       $scope.showBomScriptures = true;
       $scope.showOtScriptures = false;
+      $scope.showNtScriptures = false;
+      $scope.showDcScriptures = false;
 
       $scope.toggleBomScriptures = function() {
         $scope.showBomScriptures = !$scope.showBomScriptures;
       };
       $scope.toggleOtScriptures = function() {
         $scope.showOtScriptures = !$scope.showOtScriptures;
+      };
+      $scope.toggleNtScriptures = function() {
+        $scope.showNtScriptures = !$scope.showNtScriptures;
+      };
+      $scope.toggleDcScriptures = function() {
+        $scope.showDcScriptures = !$scope.showDcScriptures;
       };
 
   		$scope.diff = function(scripture) {

@@ -21,3 +21,27 @@
 		</div>
 	</div>
 </div>
+
+<div>
+	<h2 ng-click="toggleNtScriptures()">New Testament</h2>
+	<div ng-show="showNtScriptures">
+		<div ng-repeat="scripture in mastery.nt.scriptures">
+			<h3>{{scripture.book}} {{scripture.chapter}}:{{scripture.verse}} Difficulty: {{scripture.difficulty}}</h3>
+			<h4><em>{{scripture.gist}}</em></h4>
+			<p>Stars: {{user.mastery.nt[scripture.index].stars}}</p>
+			<a href="#/master-scriptures/nt/{{scripture.index}}">Master this scripture!</a>
+		</div>
+	</div>
+</div>
+
+<div>
+	<h2 ng-click="toggleDcScriptures()">Doctrine &amp; Covenants and Church History</h2>
+	<div ng-show="showDcScriptures">
+		<div ng-repeat="scripture in mastery.dc.scriptures">
+			<h3>{{scripture.book}} {{scripture.chapter}}:{{scripture.verse}} Difficulty: {{scripture.difficulty}}</h3>
+			<h4><em>{{scripture.gist}}</em></h4>
+			<p>Stars: {{user.mastery.dc[scripture.index].stars}}</p>
+			<a href="#/master-scriptures/dc/{{scripture.index}}">Master this scripture!</a>
+		</div>
+	</div>
+</div>
