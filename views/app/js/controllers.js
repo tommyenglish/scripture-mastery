@@ -156,7 +156,7 @@ angular.module('scriptureMasteryApp.controllers', [])
 		}
 		else if(SM_JUMBLE_MODULE.isPuzzleComplete()) {
       userFactory.updateStars(scriptureSet, scriptureIndex, $scope.game.levelType);
-      
+
 			if($scope.game.levelType < 3) {
 				$scope.game.levelType += 1;
 				loadLevel(50, 5, $scope.game.levelType);
@@ -198,18 +198,18 @@ angular.module('scriptureMasteryApp.controllers', [])
   .controller('MyCtrl2', ['$scope', 'userFactory', 'masteryFactory', function($scope, userFactory, masteryFactory) {
   		$scope.user = userFactory.getUser();
   		$scope.mastery = masteryFactory.getMasteryScriptures();
+
+      $scope.showBomScriptures = true;
+      $scope.showOtScriptures = false;
+
+      $scope.toggleBomScriptures = function() {
+        $scope.showBomScriptures = !$scope.showBomScriptures;
+      };
+      $scope.toggleOtScriptures = function() {
+        $scope.showOtScriptures = !$scope.showOtScriptures;
+      };
+
   		$scope.diff = function(scripture) {
     		return scripture.split(' ').length;
     	};
   }]);
-
-
-/* TODO:
-	4 levels.
-	Easy: All words filled in, but a certain amount jumbled up
-	Medium: Most words filled in with some jumbled words
-	Hard: No jumbled words with a certain amount missing.
-	Master: No words filled in. This one might be harder to test for depending on how it is input.
-
-
-*/
