@@ -4,7 +4,8 @@
 
 angular.module('scriptureMasteryApp.controllers', [])
   .controller('MainGameCtrl', ['$scope', '$interval', '$timeout', '$routeParams', '$location', 'userFactory', 'masteryFactory', function($scope, $interval, $timeout, $routeParams, $location, userFactory, masteryFactory) {
-  	var currentlySelectedPiece, displayWordTimer, scriptureSet = $routeParams.scripture_set, scriptureIndex = $routeParams.scripture_index, user = userFactory.getUser(), mastery = masteryFactory.getMasteryScriptures();
+  	var currentlySelectedPiece, displayWordTimer, scriptureSet = $routeParams.scripture_set, scriptureIndex = $routeParams.scripture_index, 
+    dangUrl = '/dang/' + scriptureSet + '/' + scriptureIndex, user = userFactory.getUser(), mastery = masteryFactory.getMasteryScriptures();
 
   	$scope.userAnswer = '';
   	$scope.lockdownAnswerBox = true;
@@ -151,8 +152,8 @@ angular.module('scriptureMasteryApp.controllers', [])
   	}
 	// see if all jumbled items items have been answered. If so, let user know, otherwise jump to the next jumbled piece.
   	function checkPuzzleComplete() {
-		if($scope.game.hearts === 0) {
-			alert('out of hearts, game over!');
+		if($scope.game.hearts === 0) { // game over
+      $timeout(function() { $location.path(dangUrl); }, 1000);
 		}
 		else if(SM_JUMBLE_MODULE.isPuzzleComplete()) {
       userFactory.updateStars(scriptureSet, scriptureIndex, $scope.game.levelType);
@@ -220,4 +221,9 @@ angular.module('scriptureMasteryApp.controllers', [])
   		$scope.diff = function(scripture) {
     		return scripture.split(' ').length;
     	};
+  }])
+  .controller('DangCtrl', ['$scope',  '$routeParams', function($scope, $routeParams) {
+    var tryAgainUrl = 'master-scriptures/' + $routeParams.scripture_set + '/' + $routeParams.scripture_index;
+
+    $scope.tryAgainUrl = tryAgainUrl;
   }]);

@@ -12,5 +12,6 @@ angular.module('scriptureMasteryApp', [
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/master-scriptures', {templateUrl: 'partials/levelSelect.html', controller: 'LevelSelectCtrl'});
   $routeProvider.when('/master-scriptures/:scripture_set/:scripture_index', {templateUrl: 'partials/playground.html', controller: 'MainGameCtrl'});
+  $routeProvider.when('/dang/:scripture_set/:scripture_index', {templateUrl: 'partials/dang.html', controller: 'DangCtrl'});
   $routeProvider.otherwise({redirectTo: '/master-scriptures'});
 }]);
